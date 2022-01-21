@@ -8,6 +8,7 @@ import javax.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.aashdit.sso.entity.User;
@@ -22,6 +23,6 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 	@Modifying
 	@Transactional
 	@Query(value = "update User u set u.password = :password where u.userName = :userName")
-	public Integer resetSuccess(String userName, String password);
+	public Integer resetSuccess(@Param(value = "userName") String userName, @Param(value = "password") String password);
 
 }
