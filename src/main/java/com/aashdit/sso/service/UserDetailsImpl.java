@@ -6,14 +6,13 @@ import java.util.Collections;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import com.aashdit.sso.entity.User;
 
 public class UserDetailsImpl implements UserDetails {
-	
-	
+
+	private static final long serialVersionUID = 4799615735112625607L;
+
 	private User user;
 
 	public UserDetailsImpl(User user) {
@@ -23,46 +22,44 @@ public class UserDetailsImpl implements UserDetails {
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		
+
 		return Collections.singleton(new SimpleGrantedAuthority("USER"));
 	}
 
 	@Override
 	public String getPassword() {
-		
+
 		return user.getPassword();
 	}
 
 	@Override
 	public String getUsername() {
-		
+
 		return user.getUserName();
 	}
 
 	@Override
 	public boolean isAccountNonExpired() {
-		
+
 		return true;
 	}
 
 	@Override
 	public boolean isAccountNonLocked() {
-		
+
 		return true;
 	}
 
 	@Override
 	public boolean isCredentialsNonExpired() {
-		
+
 		return true;
 	}
 
 	@Override
 	public boolean isEnabled() {
-		
+
 		return true;
 	}
-
-	
 
 }

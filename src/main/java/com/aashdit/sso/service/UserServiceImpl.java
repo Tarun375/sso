@@ -1,70 +1,86 @@
 package com.aashdit.sso.service;
 
-
-
-import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import com.aashdit.sso.SsoApplication;
+import org.springframework.util.Assert;
+import org.springframework.util.CollectionUtils;
+
 import com.aashdit.sso.entity.User;
 import com.aashdit.sso.repository.UserRepository;
 
+import lombok.extern.slf4j.Slf4j;
 
 @Service
-public class UserServiceImpl implements UserService{
-	
-	//private static final Logger logger = LoggerFactory.getLogger(SsoApplication.class);
-	
+@Slf4j
+public class UserServiceImpl implements UserService {
+
 	@Autowired
-	UserRepository userRepository;
+	private UserRepository userRepository;
+	
+
 	@Override
 	public String saveUser(User user) {
+		Assert.notNull(user, "User can't be null");
 		String password = new BCryptPasswordEncoder().encode(user.getPassword());
 		user.setPassword(password);
-		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");  
-	    Date date = new Date();  
-	    //System.out.println(formatter.format(date)); 
-	    user.setCreatedBy(user.getFullName());
-	    user.setCreatedOn(formatter.format(date));
-		User user1 = userRepository.save(user);
-		System.out.println("Helloooo " +user1);
+//		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+		Date date = new Date();
+		log.debug("User {} registration ", user.getFullName());
+		user.setCreatedBy(user.getFullName());
+		user.setCreatedOn(date);
+		user.setIsActive(Boolean.TRUE);
+		User registeredUser = userRepository.save(user);
+		log.debug("User Registration Successfull :: {}", registeredUser.getUserName());
+
 		return "Registration Successfull!!";
 	}
+
 	@Override
 	public boolean verifyUser(String username, String password) {
-		//String encryptPassword = new BCryptPasswordEncoder().encode(password);
-		User user = userRepository.findByUserName(username);
-		System.out.println(user);
-		if(new BCryptPasswordEncoder().matches(password, user.getPassword()))
+		log.debug("Verifying User :: {} ", username);
+		User user = userRepository.findByUserName(username)
+				.orElseThrow(() -> new UsernameNotFoundException("Username not found"));
+		if (new BCryptPasswordEncoder().matches(password, user.getPassword()))
 			return true;
-		else 
-			return false;
-		
-	}
-	@Override
-	public boolean resetProcess(String username, String email) {
-		
-		User user = userRepository.findByUserName(username);
-		System.out.println(user);
-		if(user.getUserName().equals(username) && user.getEmail().equals(email))
-			return true;
-			
 		else
 			return false;
-		
-		
 	}
+
 	@Override
-	public void resetSuccess(String username,String password) {
+	public boolean resetProcess(String username, String email) {
+		log.debug("Reset Password UserName :: {}  and Email :: {} ", username, email);
+		User user = userRepository.findByUserName(username)
+				.orElseThrow(() -> new UsernameNotFoundException("Username not found"));
+		if (user.getUserName().equals(username) && user.getEmail().equals(email))
+			return true;
+		else
+			return false;
+	}
+
+	@Override
+	public Integer resetSuccess(String username, String password) {
 		String encryptPassword = new BCryptPasswordEncoder().encode(password);
-		userRepository.resetSuccess(username,encryptPassword);		
-		
-		
+		Integer reset = userRepository.resetSuccess(username, encryptPassword);
+
+		log.debug("Reset Password Done :: {}", reset);
+		return reset;
+	}
+
+	public Boolean checkUserExists(User user) {
+
+		List<User> users = userRepository.findByUserNameOrMobileNoOrEmail(user.getUserName(), user.getMobileNo(),
+				user.getEmail());
+
+		if (CollectionUtils.isEmpty(users)) {
+			return Boolean.FALSE;
+		}
+
+		return Boolean.TRUE;
 	}
 
 }

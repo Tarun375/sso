@@ -1,5 +1,8 @@
 package com.aashdit.sso.repository;
 
+import java.util.List;
+import java.util.Optional;
+
 import javax.transaction.Transactional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -10,14 +13,15 @@ import org.springframework.stereotype.Repository;
 import com.aashdit.sso.entity.User;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, Integer>{
+public interface UserRepository extends JpaRepository<User, Integer> {
 
-	public User findByUserName(String username);
-	
+	public Optional<User> findByUserName(String username);
+
+	public List<User> findByUserNameOrMobileNoOrEmail(String username, String mobileNo, String email);
+
 	@Modifying
 	@Transactional
-	@Query("update sso_usermaster u set u.password = ?2 where u.userName = ?1")
-	public void resetSuccess(String username, String password);
-	
+	@Query(value = "update User u set u.password = :password where u.userName = :userName")
+	public Integer resetSuccess(String userName, String password);
 
 }

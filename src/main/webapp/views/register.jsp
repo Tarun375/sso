@@ -1,29 +1,38 @@
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>  
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1" %>
 <html>
 <head>
 <title>Register From</title>
+<style>  
+.error{color:red}  
+</style> 
 </head>
 <body>
 <h2>Registration Form</h2><br>
-<form action="/registration" method="post">  
-Full name:<input type="text" name="fullName"/><br/><br/>  
-username :<input type="text" name="userName"/><br/><br/>  
-Password:<input type="password" name="password"/><br/><br/> 
-Mobile No.:<input type="text" name="mobno"/><br/><br/> 
-Email:<input type="text" name="email"/><br/><br/>  
-<label for="Department">Choose a deepartment:</label>
+<form:form method="post" action="/registration"  modelAttribute="user">  
+<div>
+<form:errors path="userUniqueError" cssClass="error"></form:errors> <br/><br/>
+</div>
+Full name:<form:input type="text" path="fullName"></form:input>  <form:errors path="fullName" cssClass="error"></form:errors> <br/><br/>  
+user Name :<form:input type="text" path="userName"></form:input> <form:errors path="userName" cssClass="error"></form:errors><br/><br/>  
+Password:<form:input type="password" path="password"></form:input> <form:errors path="password" cssClass="error"></form:errors><br/><br/> 
+Mobile No.:<form:input type="text" path="mobileNo"></form:input> <form:errors path="mobileNo" cssClass="error"></form:errors><br/><br/> 
+Email:<form:input type="text" path="email"></form:input> <form:errors path="email" cssClass="error"></form:errors> <br/><br/> 
+<label for="Department">Choose a department:</label>
 
-<select name="departmentName" id="dept">
-  <option value="dept1">dept1</option>
-  <option value="dept2">dept2</option>
-  <option value="dept3">dept3</option>
-  <option value="dept4">dept4</option>
-</select><br><br>
-Role : <input type="radio" id="admin" name="role" value="admin">
+<form:select path="departmentName" id="dept">
+  <form:option value="dept1">dept1</form:option>
+  <form:option value="dept2">dept2</form:option>
+  <form:option value="dept3">dept3</form:option>
+  <form:option value="dept4">dept4</form:option>
+</form:select><br><br>
+Role : <form:radiobutton id="admin" path="role" value="admin"/>
 <label for="admin">Admin</label>
-<input type="radio" id="user" name="role" value="user">
+<form:radiobutton id="user" path="role" value="user"/>
 <label for="user">User</label><br> <br>
-<input type="submit" value="register"/>  
-</form> <br> 
-
+<button  type="submit">Register</button>
+<button >Cancel</button>
+<%-- <form:input type="submit" value="register"/>   --%>
+</form:form> <br> 
 </body>
 </html>
