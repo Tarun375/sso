@@ -1,5 +1,7 @@
 package com.aashdit.sso.controller;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.aashdit.sso.entity.User;
 import com.aashdit.sso.service.UserServiceImpl;
@@ -92,5 +95,27 @@ public class HomeController {
 		else
 			return "login";
 	}
+	
+	@RequestMapping("/showAllUsers")
+	public ModelAndView showAllUsers(Model model) {
+		ModelAndView map=new ModelAndView("showUserList");
+		List<User> users = userService.findAllUsers();
+		if(users==null)
+			model.addAttribute("message", "Users not found!");
+		map.addObject("users", users);
+		return map;
+	}
+	
+	@PostMapping("/departmentUsers")
+	public ModelAndView showUsersDepartmentWise(String departmentName,Model model) {
+		ModelAndView map=new ModelAndView("showDepartmentUserList");
+		List<User> deptUsers = userService.showUsersDepartmentWise(departmentName);
+		if(deptUsers==null)
+			model.addAttribute("message", "Users not found!");
+		map.addObject("users", deptUsers);
+		return map;
+
+	}
+
 
 }

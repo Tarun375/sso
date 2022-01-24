@@ -83,4 +83,18 @@ public class UserServiceImpl implements UserService {
 		return Boolean.TRUE;
 	}
 
+		public List<User> findAllUsers() {
+			
+			List<User> users = userRepository.findAll();
+			return users;
+			
+		}
+		public List<User> showUsersDepartmentWise(String departmentName) {
+				
+				List<User> deptUsers = userRepository.findByDepartmentName(departmentName);
+				return deptUsers;
+				
+			}
+	
+
 }
