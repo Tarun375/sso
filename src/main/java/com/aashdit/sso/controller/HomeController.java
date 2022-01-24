@@ -5,6 +5,7 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -33,8 +35,13 @@ public class HomeController {
 		return "login";
 	}
 
-	@RequestMapping("/login")
-	public String login() {
+	/*
+	 * @RequestMapping("/login") public String login() { return "login"; }
+	 */
+
+	@RequestMapping(value = "/login", method = RequestMethod.GET)
+	public String login(Model model, String error, String logout) {
+
 		return "login";
 	}
 
@@ -89,11 +96,19 @@ public class HomeController {
 	}
 
 	@PostMapping("/loginProcess")
-	public String loginProcess(@RequestParam("username") String username, @RequestParam("password") String password) {
-		if (userService.verifyUser(username, password))
-			return "home";
-		else
+	public String loginProcess(@RequestParam("username") String username, @RequestParam("password") String password,
+			Model model) {
+		try {
+			if (userService.verifyUser(username, password)) {
+				return "home";
+			} else {
+				model.addAttribute("error", "Invalid Password.");
+				return "login";
+			}
+		} catch (UsernameNotFoundException e) {
+			model.addAttribute("error", "Unknown User.");
 			return "login";
+		}
 	}
 	
 	@RequestMapping("/showAllUsers")
@@ -116,6 +131,4 @@ public class HomeController {
 		return map;
 
 	}
-
-
 }
