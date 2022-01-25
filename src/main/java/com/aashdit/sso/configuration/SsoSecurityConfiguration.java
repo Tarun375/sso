@@ -31,7 +31,7 @@ public class SsoSecurityConfiguration extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 
 		http.csrf().disable().authorizeRequests().antMatchers("/loginProcess").permitAll()
-				// .anyRequest().authenticated()
+				//.anyRequest().authenticated()
 				.and().formLogin().loginPage("/login").permitAll().and().logout().invalidateHttpSession(true)
 				.clearAuthentication(true).logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
 				.logoutSuccessUrl("/logoutSuccess").permitAll();

@@ -6,34 +6,31 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Show all Users DepartmentWise</title>
-<style>  
-.error{color:red}  
-</style> 
+<title>Show all Admins</title>
+
 </head>
 
 <body>
-    <h1>Users List DepartmentWise</h1>
-    ${message}
+    <h1>Admins List</h1>
+    <span style="color:red;">${error}</span><br/>
 
 
-<c:if test="${not empty users}">
+<c:if test="${not empty admins}">
     
-    <table >
+    <table class="table table-striped">
   <thead>
     <tr>
       <th scope="col">Id</th>
       <th scope="col">Full Name</th>
       <th scope="col">UserName</th>
       <th scope="col">MobileNo</th>
-      <th scope="col">Department Name</th>
       <th scope="col">role</th>
       <th scope="col">isActive</th>
       <th scope="col">modify</th>
     </tr>
   </thead>
   <tbody>
-  <c:forEach items="${users}" var="user"><br>
+  <c:forEach items="${admins}" var="user"><br>
     <tr>
    
       <td></td>
@@ -41,7 +38,6 @@
       <td>${user.getFullName()}</td>
       <td>${user.getUserName()}</td>
       <td>${user.getMobileNo()}</td>
-      <td>${user.getDepartmentName()}</td>
       <td>${user.getRole()}</td>
       <td>${user.getIsActive()}</td>
       <td><a href=" ">Edit</a> <a href=" ">Delete</a></td>
@@ -52,8 +48,6 @@
     
 
 </c:if>
-<br>
-<div><a href="views/adminDashboard.jsp">Got to Home</a></div>
-
+<div><a href="views/superAdminDashboard.jsp">Got to Home</a></div>
 </body>
 </html>

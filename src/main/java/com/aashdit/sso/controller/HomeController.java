@@ -1,15 +1,21 @@
 package com.aashdit.sso.controller;
 
+import java.security.Principal;
 import java.util.List;
+import java.util.Optional;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.aashdit.sso.entity.User;
+import com.aashdit.sso.repository.UserRepository;
 import com.aashdit.sso.service.UserServiceImpl;
 
 import lombok.extern.slf4j.Slf4j;
@@ -29,6 +36,9 @@ public class HomeController {
 
 	@Autowired
 	private UserServiceImpl userService;
+	
+	@Autowired
+	private UserRepository userRepository;
 
 	@RequestMapping("/")
 	public String home() {
@@ -100,7 +110,19 @@ public class HomeController {
 			Model model) {
 		try {
 			if (userService.verifyUser(username, password)) {
-				return "home";
+				Optional<User> optionalUser = userRepository.findByUserName(username);
+				User user=optionalUser.get();
+				if(user.getRole().equals("superAdmin"))
+					return "superAdminDashboard";
+					
+				if(user.getRole().equals("admin"))
+					return "adminDashboard";
+					
+				if(user.getRole().equals("user"))
+					return "userDashboard";
+				
+				return "Role not found";
+					
 			} else {
 				model.addAttribute("error", "Invalid Password.");
 				return "login";
@@ -109,24 +131,43 @@ public class HomeController {
 			model.addAttribute("error", "Unknown User.");
 			return "login";
 		}
+		
 	}
 	
 	@RequestMapping("/showAllUsers")
 	public ModelAndView showAllUsers(Model model) {
 		ModelAndView map=new ModelAndView("showUserList");
-		List<User> users = userService.findAllUsers();
+		String role="user";
+		List<User> users = userService.findByRole(role);
 		if(users==null)
-			model.addAttribute("message", "Users not found!");
+			model.addAttribute("error", "Users not found!");
 		map.addObject("users", users);
 		return map;
 	}
 	
-	@PostMapping("/departmentUsers")
-	public ModelAndView showUsersDepartmentWise(String departmentName,Model model) {
+	@RequestMapping("/showAllAdmins")
+	public ModelAndView showAllAdmins(Model model) {
+		ModelAndView map=new ModelAndView("showAdminList");
+		String role="admin";
+		List<User> admins = userService.findByRole(role);
+		if(admins==null)
+			model.addAttribute("error", "Admins not found!");
+		map.addObject("admins", admins);
+		return map;
+	}
+	
+	@GetMapping("/departmentUsers")
+	public ModelAndView showUsersDepartmentWise(Model model) {
 		ModelAndView map=new ModelAndView("showDepartmentUserList");
-		List<User> deptUsers = userService.showUsersDepartmentWise(departmentName);
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		String username = auth.getName(); 
+		System.out.println("The current username is: " +username);
+		Optional<User> user1 = userRepository.findByUserName(username);
+		User user=user1.get();
+		System.out.println("The current user is: " +user);
+		List<User> deptUsers = userService.showUsersDepartmentWise(user.getDepartmentName());
 		if(deptUsers==null)
-			model.addAttribute("message", "Users not found!");
+			model.addAttribute("error", "Users not found!");
 		map.addObject("users", deptUsers);
 		return map;
 

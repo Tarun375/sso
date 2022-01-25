@@ -14,4 +14,6 @@ public interface UserService {
 	public Integer resetSuccess(String username, String password);
 	
 	public List<User> findAllUsers();
+	
+	public List<User> findByRole(String role);
 }

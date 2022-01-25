@@ -7,14 +7,12 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Show all Users</title>
-<style>  
-.error{color:red}  
-</style> 
+
 </head>
 
 <body>
     <h1>Users List</h1>
-    ${message}
+    <span style="color:red;">${error}</span><br/>
 
 
 <c:if test="${not empty users}">
@@ -50,6 +48,8 @@
     
 
 </c:if>
+<br>
+<div><a href="views/superAdminDashboard.jsp">Got to Home</a></div>
 
 </body>
 </html>

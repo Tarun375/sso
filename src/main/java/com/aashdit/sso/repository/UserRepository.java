@@ -26,5 +26,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 	public Integer resetSuccess(@Param(value = "userName") String userName, @Param(value = "password") String password);
 
 	public List<User> findByDepartmentName(String departmentName);
+	
+	public List<User> findByRole(String Role);
 
 }

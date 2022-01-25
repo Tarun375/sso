@@ -95,6 +95,11 @@ public class UserServiceImpl implements UserService {
 				return deptUsers;
 				
 			}
+
+		public List<User> findByRole(String role) {
+			List<User> users = userRepository.findByRole(role);
+			return users;
+		}
 	
 
 }
