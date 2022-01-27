@@ -20,6 +20,14 @@ import javax.validation.constraints.Pattern;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * 
+ * @author Biswa Bhusan Sahoo
+ * @since 25-Jan-2022
+ * 
+ *
+ *
+ */
 @Data
 @NoArgsConstructor
 @Entity
@@ -62,5 +70,5 @@ public class User implements Serializable {
 
 	@Transient
 	private String userUniqueError;
-	
+
 }

@@ -1,6 +1,5 @@
 package com.aashdit.sso.controller;
 
-import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
@@ -9,7 +8,6 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,19 +24,30 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.aashdit.sso.entity.User;
 import com.aashdit.sso.repository.UserRepository;
+import com.aashdit.sso.service.UserDetailsImpl;
 import com.aashdit.sso.service.UserServiceImpl;
+import com.aashdit.sso.util.JwtTokenUtil;
 
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * 
+ * @author Biswa Bhusan Sahoo
+ * @since 2022
+ *
+ */
 @Controller
 @Slf4j
 public class HomeController {
 
 	@Autowired
 	private UserServiceImpl userService;
-	
+
 	@Autowired
 	private UserRepository userRepository;
+
+	@Autowired
+	private JwtTokenUtil jwtTokenUtil;
 
 	@RequestMapping("/")
 	public String home() {
@@ -51,7 +60,22 @@ public class HomeController {
 
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public String login(Model model, String error, String logout) {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		UserDetailsImpl userDetailsImpl= (UserDetailsImpl) authentication.getPrincipal();
+		if (authentication.isAuthenticated()) {
+			Optional<User> optionalUser = userRepository.findByUserName(userDetailsImpl.getUsername());
+			User user = optionalUser.get();
+			if (user.getRole().equals("superAdmin"))
+				return "superAdminDashboard";
 
+			if (user.getRole().equals("admin"))
+				return "adminDashboard";
+
+			if (user.getRole().equals("user"))
+				return "userDashboard";
+
+			return "Role not found";
+		} 
 		return "login";
 	}
 
@@ -109,64 +133,79 @@ public class HomeController {
 	public String loginProcess(@RequestParam("username") String username, @RequestParam("password") String password,
 			Model model) {
 		try {
-			if (userService.verifyUser(username, password)) {
+			if (SecurityContextHolder.getContext().getAuthentication().isAuthenticated()) {
 				Optional<User> optionalUser = userRepository.findByUserName(username);
-				User user=optionalUser.get();
-				if(user.getRole().equals("superAdmin"))
+				User user = optionalUser.get();
+				if (user.getRole().equals("superAdmin"))
 					return "superAdminDashboard";
-					
-				if(user.getRole().equals("admin"))
+
+				if (user.getRole().equals("admin"))
 					return "adminDashboard";
-					
-				if(user.getRole().equals("user"))
+
+				if (user.getRole().equals("user"))
 					return "userDashboard";
-				
+
 				return "Role not found";
-					
 			} else {
-				model.addAttribute("error", "Invalid Password.");
-				return "login";
+				if (userService.verifyUser(username, password)) {
+					Optional<User> optionalUser = userRepository.findByUserName(username);
+					User user = optionalUser.get();
+					if (user.getRole().equals("superAdmin"))
+						return "superAdminDashboard";
+
+					if (user.getRole().equals("admin"))
+						return "adminDashboard";
+
+					if (user.getRole().equals("user"))
+						return "userDashboard";
+
+					return "Role not found";
+
+				} else {
+					model.addAttribute("error", "Invalid Password.");
+					return "login";
+				}
 			}
 		} catch (UsernameNotFoundException e) {
 			model.addAttribute("error", "Unknown User.");
 			return "login";
 		}
-		
+
 	}
-	
+
 	@RequestMapping("/showAllUsers")
 	public ModelAndView showAllUsers(Model model) {
-		ModelAndView map=new ModelAndView("showUserList");
-		String role="user";
+		ModelAndView map = new ModelAndView("showUserList");
+		String role = "user";
 		List<User> users = userService.findByRole(role);
-		if(users==null)
+		if (users == null)
 			model.addAttribute("error", "Users not found!");
 		map.addObject("users", users);
 		return map;
 	}
-	
+
 	@RequestMapping("/showAllAdmins")
 	public ModelAndView showAllAdmins(Model model) {
-		ModelAndView map=new ModelAndView("showAdminList");
-		String role="admin";
+		ModelAndView map = new ModelAndView("showAdminList");
+		String role = "admin";
 		List<User> admins = userService.findByRole(role);
-		if(admins==null)
+		if (admins == null)
 			model.addAttribute("error", "Admins not found!");
 		map.addObject("admins", admins);
 		return map;
 	}
-	
+
 	@GetMapping("/departmentUsers")
 	public ModelAndView showUsersDepartmentWise(Model model) {
-		ModelAndView map=new ModelAndView("showDepartmentUserList");
+		ModelAndView map = new ModelAndView("showDepartmentUserList");
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		String username = auth.getName(); 
-		System.out.println("The current username is: " +username);
+		String username = auth.getName();
+		System.out.println("The current username is: " + username);
 		Optional<User> user1 = userRepository.findByUserName(username);
-		User user=user1.get();
-		System.out.println("The current user is: " +user);
+		User user = user1.get();
+		System.out.println("The current user is: " + user);
 		List<User> deptUsers = userService.showUsersDepartmentWise(user.getDepartmentName());
-		if(deptUsers==null)
+		if (deptUsers == null)
 			model.addAttribute("error", "Users not found!");
 		map.addObject("users", deptUsers);
 		return map;

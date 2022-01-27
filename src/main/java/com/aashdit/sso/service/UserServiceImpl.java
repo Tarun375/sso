@@ -21,14 +21,12 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private UserRepository userRepository;
-	
 
 	@Override
 	public String saveUser(User user) {
 		Assert.notNull(user, "User can't be null");
 		String password = new BCryptPasswordEncoder().encode(user.getPassword());
 		user.setPassword(password);
-//		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 		Date date = new Date();
 		log.debug("User {} registration ", user.getFullName());
 		user.setCreatedBy(user.getFullName());
@@ -83,23 +81,22 @@ public class UserServiceImpl implements UserService {
 		return Boolean.TRUE;
 	}
 
-		public List<User> findAllUsers() {
-			
-			List<User> users = userRepository.findAll();
-			return users;
-			
-		}
-		public List<User> showUsersDepartmentWise(String departmentName) {
-				
-				List<User> deptUsers = userRepository.findByDepartmentName(departmentName);
-				return deptUsers;
-				
-			}
+	public List<User> findByRole(String role) {
+		List<User> users = userRepository.findByRole(role);
+		return users;
+	}
 
-		public List<User> findByRole(String role) {
-			List<User> users = userRepository.findByRole(role);
-			return users;
-		}
-	
+	public List<User> findAllUsers() {
 
+		List<User> users = userRepository.findAll();
+		return users;
+
+	}
+
+	public List<User> showUsersDepartmentWise(String departmentName) {
+
+		List<User> deptUsers = userRepository.findByDepartmentName(departmentName);
+		return deptUsers;
+
+	}
 }
