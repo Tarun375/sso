@@ -16,4 +16,12 @@ public interface UserService {
 	public List<User> findAllUsers();
 	
 	public List<User> findByRole(String role);
+	
+	public String updateAdminDetails(User user);
+	
+	public String updateUserDetails(User user); 
+
+	public void deleteUser(int userId); 	 
+
+	public void deleteAdmin(int userId);
 }
