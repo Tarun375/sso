@@ -40,7 +40,7 @@
       <td>${user.getMobileNo()}</td>
       <td>${user.getRole()}</td>
       <td>${user.getIsActive()}</td>
-      <td><a href=" ">Edit</a> <a href=" ">Delete</a></td>
+      <td><a href="/userUpdationForm/${user.getUserId()}">Edit</a> <a href="/deleteUser/${user.getUserId()}">Delete</a></td>
     </tr>
     </c:forEach>
   </tbody>

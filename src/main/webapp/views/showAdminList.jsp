@@ -12,8 +12,9 @@
 
 <body>
     <h1>Admins List</h1>
+    
     <span style="color:red;">${error}</span><br/>
-
+	${message}
 
 <c:if test="${not empty admins}">
     
@@ -40,7 +41,7 @@
       <td>${user.getMobileNo()}</td>
       <td>${user.getRole()}</td>
       <td>${user.getIsActive()}</td>
-      <td><a href=" ">Edit</a> <a href=" ">Delete</a></td>
+      <td><a href="/adminUpdationForm/${user.getUserId()}">Edit</a> <a href="/deleteAdmin/${user.getUserId()}">Delete</a></td>
     </tr>
     </c:forEach>
   </tbody>

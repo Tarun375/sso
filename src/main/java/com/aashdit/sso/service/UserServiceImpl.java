@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 
@@ -81,11 +82,6 @@ public class UserServiceImpl implements UserService {
 		return Boolean.TRUE;
 	}
 
-	public List<User> findByRole(String role) {
-		List<User> users = userRepository.findByRole(role);
-		return users;
-	}
-
 	public List<User> findAllUsers() {
 
 		List<User> users = userRepository.findAll();
@@ -93,10 +89,55 @@ public class UserServiceImpl implements UserService {
 
 	}
 
-	public List<User> showUsersDepartmentWise(String departmentName) {
+	public List<User> showUsersDepartmentWise(String departmentName, String role) {
 
-		List<User> deptUsers = userRepository.findByDepartmentName(departmentName);
+		List<User> deptUsers = userRepository.findByDepartmentNameAndRole(departmentName, role);
 		return deptUsers;
+
+	}
+
+	public List<User> findByRole(String role) {
+		List<User> users = userRepository.findByRole(role);
+		return users;
+	}
+
+	public String updateAdminDetails(User user) {
+		Date date = new Date();
+		log.debug("User {} registration ", user.getFullName());
+		user.setUpdatedBy(user.getFullName());
+		user.setUpdatedOn(date);
+		user.setIsActive(Boolean.TRUE);
+		User updatedAdmin = userRepository.save(user);
+		log.debug("Admin Updation Successfull :: {}", updatedAdmin.getUserName());
+
+		return "Updation Successfull!!";
+
+	}
+
+	public String updateUserDetails(User user) {
+		Date date = new Date();
+		log.debug("User {} updation ", user.getFullName());
+		user.setUpdatedBy(user.getFullName());
+		user.setUpdatedOn(date);
+		user.setIsActive(Boolean.TRUE);
+		User updatedUser = userRepository.save(user);
+		log.debug("User Updation Successfull :: {}", updatedUser.getUserName());
+
+		return "Updation Successfull!!";
+
+	}
+
+	@Transactional
+	public void deleteUser(int userId) {
+
+		userRepository.deleteById(userId);
+
+	}
+
+	@Transactional
+	public void deleteAdmin(int userId) {
+
+		userRepository.deleteById(userId);
 
 	}
 }

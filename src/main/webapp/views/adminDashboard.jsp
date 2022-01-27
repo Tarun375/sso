@@ -10,7 +10,11 @@
 <h2>Welcome to Admin home page!!!</h2><br><br>
 
 <h3> <a href="/logoutSuccess"> Logout </a> </h3><br><br><br>
-<h3> <a href="/departmentUsers"> Show All Department Users </a> </h3><br>
+<h3> <a href="/departmentUsers"> Show All Department Users </a> </h3><br><br>
+
+<h3> <a href="/addDept"> Add Department </a> </h3><br>
+
+<h3> <a href="/showAllDept"> Show All Departments </a> </h3><br>
 
 
 </body>

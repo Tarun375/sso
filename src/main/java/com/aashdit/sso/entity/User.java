@@ -51,19 +51,24 @@ public class User implements Serializable {
 	@Column(nullable = false)
 	@Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$", message = "Invalid Password")
 	private String password;
+	
 	@Column(unique = true, nullable = false)
 	@Pattern(regexp = "^\\(?(\\d{3})\\)?[- ]?(\\d{3})[- ]?(\\d{4})$", message = "Invalid Mobile Number")
 	private String mobileNo;
+	
 	@Column(unique = true, nullable = false)
 	@Email(message = "Invalid Email")
 	@NotBlank(message = "Email is required")
 	private String email;
+	
 	private String departmentName;
 	private String role;
 	private String createdBy;
+	
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date createdOn;
 	private String updatedBy;
+	
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date updatedOn;
 	private Boolean isActive;
