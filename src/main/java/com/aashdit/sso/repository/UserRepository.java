@@ -13,6 +13,13 @@ import org.springframework.stereotype.Repository;
 
 import com.aashdit.sso.entity.User;
 
+/**
+ * 
+ * @author Tarun Chakrabarty
+ * @since 16-Jan-2022
+ * 
+ *
+ */
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer> {
 

@@ -16,6 +16,13 @@ import com.aashdit.sso.repository.UserRepository;
 
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * 
+ * @author Tarun Chakrabarty
+ * @since 16-Jan-2022
+ * 
+ *
+ */
 @Service
 @Slf4j
 public class UserServiceImpl implements UserService {

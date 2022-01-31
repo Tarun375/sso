@@ -13,7 +13,13 @@ import org.springframework.stereotype.Component;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-
+/**
+ * 
+ * @author Tarun Chakrabarty
+ * @since 29-Jan-2022
+ * 
+ *
+ */
 @Component
 public class JwtTokenUtil implements Serializable {
 

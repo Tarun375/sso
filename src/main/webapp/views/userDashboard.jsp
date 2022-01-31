@@ -10,10 +10,10 @@
 <h2>Welcome to User home page!!!</h2><br><br>
 
 <h2>Your apps....</h2> <br>
-<a href=" "><h3>app1</h3></a> <br>
-<a href=" "><h3>app2</h3></a> <br>
-<a href=" "><h3>app3</h3></a> <br>
-<a href=" "><h3>app4</h3></a> <br>
+<a href="/google.com"><h3>google</h3></a> <br>
+<a href="/youtube.com"><h3>Youtube</h3></a> <br>
+<a href="/gmail.com"><h3>gmail.com</h3>Gmail</a> <br>
+<a href=" wcd.odisha.gov.in"><h3>womens & child development </h3></a> <br>
 
 <br>
 <a href="/logoutSuccess"> Logout </a> </h3><br>

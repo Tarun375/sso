@@ -6,37 +6,37 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Show all Departments</title>
+<title>Show all Applications</title>
 
 </head>
 
 <body>
-    <h1>Department List</h1>
+    <h1>All Application List</h1>
     <span style="color:red;">${error}</span><br/>
 
 
-<c:if test="${not empty deptList}">
+<c:if test="${not empty allAppList}">
     
     <table class="table table-striped">
   <thead>
     <tr>
-      <th scope="col">deptId</th>
-      <th scope="col">Department Name</th>
-      <th scope="col">Department Code</th>
+      <th scope="col">appId</th>
+      <th scope="col">Application Name</th>
+      <th scope="col">Applicattion Url</th>
       <th scope="col">isActive</th>
       <th scope="col">modify</th>
     </tr>
   </thead>
   <tbody>
-  <c:forEach items="${deptList}" var="dept"><br>
+  <c:forEach items="${allAppList}" var="appList"><br>
     <tr>
    
       <td></td>
-      <td>${dept.getDeptId()}</td>
-      <td>${dept.getDeptName()}</td>
-      <td>${dept.getDeptCode()}</td>
-      <td>${dept.getIsActive()}</td>
-      <td><a href="/deptUpdationForm/${dept.getDeptId()}">Edit</a> <a href="/deleteDept/${dept.getDeptId()}">Delete</a></td>
+      <td>${appList.getAppId()}</td>
+      <td>${appList.getAppName()}</td>
+      <td>${appList.getAppUrl()}</td>
+      <td>${appList.getIsActive()}</td>
+      <td><a href="/appUpationForm/${appList.getAppId()}">Edit</a> <a href="/deleteApp/${appList.getAppId()}">Delete</a></td>
     </tr>
     </c:forEach>
   </tbody>

@@ -9,6 +9,13 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import com.aashdit.sso.entity.User;
 
+/**
+ * 
+ * @author Tarun Chakrabarty
+ * @since 20-Jan-2022
+ * 
+ *
+ */
 public class UserDetailsImpl implements UserDetails {
 
 	private static final long serialVersionUID = 4799615735112625607L;

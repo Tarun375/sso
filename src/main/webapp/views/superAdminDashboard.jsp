@@ -7,6 +7,9 @@
 
 <h3> <a href="/logoutSuccess"> Logout </a> </h3><br><br><br>
 <h3> <a href="/showAllUsers"> Show All Users </a> </h3><br>
-<h3> <a href="/showAllAdmins"> Show All Admins </a> </h3>
+<h3> <a href="/showAllAdmins"> Show All Admins </a> </h3><br>
+
+<h3> <a href="/addAppForm"> Add new Application </a> </h3><br>
+<h3> <a href="/showAllApp"> Show All Application </a> </h3><br>
 </body>
 </html>

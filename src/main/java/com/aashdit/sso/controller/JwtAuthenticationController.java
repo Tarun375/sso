@@ -19,8 +19,9 @@ import com.aashdit.sso.model.UserResponse;
 import com.aashdit.sso.util.JwtTokenUtil;
 /**
  * 
- * @author Biswa Bhusan Sahoo
- * @since  2022
+ * @author Tarun Chakrabarty
+ * @since 29-Jan-2022
+ * 
  *
  */
 @RestController

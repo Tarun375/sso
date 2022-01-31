@@ -16,6 +16,14 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import com.aashdit.sso.util.JwtRequestFilter;
 
+/**
+ * 
+ * @author Tarun Chakrabarty
+ * @since 20-Jan-2022
+ * 
+ *
+ */
+
 @Configuration
 @EnableWebSecurity
 public class SsoSecurityConfiguration extends WebSecurityConfigurerAdapter {

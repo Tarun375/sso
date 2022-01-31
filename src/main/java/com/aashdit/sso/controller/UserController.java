@@ -31,13 +31,15 @@ import lombok.extern.slf4j.Slf4j;
 
 /**
  * 
- * @author Biswa Bhusan Sahoo
- * @since 2022
+ * @author Tarun Chakrabarty
+ * @since 15-Jan-2022
+ * 
  *
  */
 @Controller
 @Slf4j
-public class HomeController {
+
+public class UserController {
 
 	@Autowired
 	private UserServiceImpl userService;
@@ -139,7 +141,7 @@ public class HomeController {
 	public String loginProcess(@RequestParam("username") String username, @RequestParam("password") String password,
 			Model model) {
 		try {
-			if (SecurityContextHolder.getContext().getAuthentication().isAuthenticated()) {
+			/*if (SecurityContextHolder.getContext().getAuthentication().isAuthenticated()) {
 				Optional<User> optionalUser = userRepository.findByUserName(username);
 				User user = optionalUser.get();
 				if (user.getRole().equals("superAdmin"))
@@ -152,7 +154,7 @@ public class HomeController {
 					return "userDashboard";
 
 				return "Role not found";
-			} else {
+			} else {*/
 				if (userService.verifyUser(username, password)) {
 					Optional<User> optionalUser = userRepository.findByUserName(username);
 					User user = optionalUser.get();
@@ -171,7 +173,7 @@ public class HomeController {
 					model.addAttribute("error", "Invalid Password.");
 					return "login";
 				}
-			}
+			
 		} catch (UsernameNotFoundException e) {
 			model.addAttribute("error", "Unknown User.");
 			return "login";
